@@ -50,10 +50,10 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ModelsPost  $modelsPost
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function show(ModelsPost $modelsPost)
+    public function show(Article $article)
     {
         //
     }
@@ -61,10 +61,10 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ModelsPost  $modelsPost
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function edit(ModelsPost $modelsPost)
+    public function edit(Article $article)
     {
         //
     }
@@ -73,22 +73,25 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ModelsPost  $modelsPost
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ModelsPost $modelsPost)
+    public function update(Request $request, Article $article)
     {
         //
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ModelsPost  $modelsPost
+     * @param  string $articleId
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ModelsPost $modelsPost)
+    public function destroy($articleId)
     {
-        //
+        $article = Article::find($articleId);
+        if (!is_null($article)) {
+            $article->delete();
+            return response()->json(['status' => 'success'], 200);
+        }
+        return response()->json(['status' => 'not_found'], 400);
     }
 }
