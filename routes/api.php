@@ -26,3 +26,7 @@ Route::prefix('auth')->group(function () {
         Route::post('logout', 'AuthController@logout');
     });
 });
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('article', 'ArticleController@store')->middleware('isAdmin');
+});
