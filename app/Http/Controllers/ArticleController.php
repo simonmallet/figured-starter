@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -14,7 +14,10 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'status' => 'success',
+            'data' => Article::orderBy('created_at', 'desc')->get()
+        ]);
     }
 
     /**
@@ -35,7 +38,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post;
+        $post = new Article;
         $post->title = $request->title;
         $post->body = $request->body;
         $post->tags = $request->tags;
