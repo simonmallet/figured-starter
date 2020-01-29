@@ -33,11 +33,6 @@ class ArticleControllerTest extends TestCase
             ->assertJsonCount(2, 'data');
     }
 
-    private function getArticlesList()
-    {
-        return $this->json('GET', route('api.articles.list'));
-    }
-
     public function testGivenAdminUserWhenCreateArticleThenSuccessful()
     {
         $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
@@ -66,13 +61,45 @@ class ArticleControllerTest extends TestCase
             ->assertStatus(403);
     }
 
-    public function testDeleteExistingArticle()
+    public function testGivenAdminUserWhenDeleteArticleAndExistsThenSuccessful()
     {
+        $article = factory(Article::class)->create();
 
+        $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
+        $this->actingAs($user, 'api')->json('DELETE', route('api.articles.delete', ['articleId' => $article->id]))
+            ->assertStatus(200);
+
+        $this->getArticlesList()
+            ->assertStatus(200)
+            ->assertJsonCount(0, 'data');
     }
 
-    public function testDeleteArticleNotFound()
+    public function testGivenAdminUserWhenDeleteArticleAndNotFoundThenReturnNotFound()
     {
+        $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
+        $this->actingAs($user, 'api')->json('DELETE', route('api.articles.delete', ['articleId' => 'fakeId']))
+            ->assertStatus(400);
+    }
 
+    public function testGivenRegularUserWhenDeleteArticleThenReturnError()
+    {
+        $article = factory(Article::class)->create();
+
+        $user = factory(User::class)->create(['role' => User::ROLE_USER]);
+        $this->actingAs($user, 'api')->json('DELETE', route('api.articles.delete', ['articleId' => $article->id]))
+            ->assertStatus(403);
+    }
+
+    public function testGivenAnonymousUserWhenDeleteArticleThenReturnError()
+    {
+        $article = factory(Article::class)->create();
+
+        $this->json('DELETE', route('api.articles.delete', ['articleId' => $article->id]))
+            ->assertStatus(403);
+    }
+
+    private function getArticlesList()
+    {
+        return $this->json('GET', route('api.articles.list'));
     }
 }

@@ -31,5 +31,5 @@ Route::get('article', 'ArticleController@index')->name('api.articles.list');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('article', 'ArticleController@store')->middleware('isAdmin')->name('api.articles.post');
-    Route::delete('article/{articleId}', 'ArticleController@destroy')->middleware('isAdmin');
+    Route::delete('article/{articleId}', 'ArticleController@destroy')->middleware('isAdmin')->name('api.articles.delete');
 });
