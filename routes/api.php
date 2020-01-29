@@ -27,7 +27,7 @@ Route::prefix('auth')->group(function () {
     });
 });
 
-Route::get('article', 'ArticleController@index');
+Route::get('article', 'ArticleController@index')->name('api.articles.list');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('article', 'ArticleController@store')->middleware('isAdmin');

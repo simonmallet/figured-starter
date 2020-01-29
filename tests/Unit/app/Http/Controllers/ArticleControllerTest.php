@@ -9,8 +9,7 @@ class ArticleControllerTest extends TestCase
 {
     public function testGivenNoArticlesWhenArticleIsCalledThenEmptyDatasetReturned()
     {
-        $response = $this->json('GET', '/api/article');
-        $response
+        $this->getArticlesList()
             ->assertStatus(200)
             ->assertJsonCount(0, 'data');
     }
@@ -19,8 +18,7 @@ class ArticleControllerTest extends TestCase
     {
         factory(Article::class)->create();
 
-        $response = $this->json('GET', '/api/article');
-        $response
+        $this->getArticlesList()
             ->assertStatus(200)
             ->assertJsonCount(1, 'data');
     }
@@ -29,9 +27,28 @@ class ArticleControllerTest extends TestCase
     {
         factory(Article::class, 2)->create();
 
-        $response = $this->json('GET', '/api/article');
-        $response
+        $this->getArticlesList()
             ->assertStatus(200)
             ->assertJsonCount(2, 'data');
+    }
+
+    private function getArticlesList()
+    {
+        return $this->json('GET', route('api.articles.list'));
+    }
+
+    public function testCreateArticle()
+    {
+
+    }
+
+    public function testDeleteExistingArticle()
+    {
+
+    }
+
+    public function testDeleteArticleNotFound()
+    {
+
     }
 }
