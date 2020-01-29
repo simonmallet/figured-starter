@@ -13,7 +13,7 @@ class Authenticate extends Middleware
         if ($this->authenticate($request, $guards) === self::AUTH_ERROR) {
             return response()->json([
                 'error' => 'Unauthorized'
-            ]);
+            ], 403);
         }
         return $next($request);
     }
