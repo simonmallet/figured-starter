@@ -38,13 +38,14 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        // validate fields...
         $post = new Article;
         $post->title = $request->title;
         $post->body = $request->body;
         $post->tags = $request->tags;
         $post->save();
 
-        return response()->json(['status' => 'success'], 200);
+        return response()->json(['status' => 'success'], 201);
     }
 
     /**

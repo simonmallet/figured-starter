@@ -35,6 +35,21 @@ return [
 
     'connections' => [
 
+        'sqlite_testing_db' => [
+            'driver' => 'sqlite',
+            'database' => storage_path().'/testing_database.sqlite',
+            'prefix' => '',
+        ],
+
+        'testing_mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGO_DB_HOST', 'mongodb'),
+            'username' => env('MONGO_DB_USERNAME', 'user'),
+            'password' => env('MONGO_DB_PASSWORD', 'pass'),
+            'database' => env('MONGO_DB_DATABASE', 'testing_homestead'),
+            'port'     => env('MONGO_DB_PORT', 27017),
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
