@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\Article;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -21,29 +22,13 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        Artisan::call('migrate');
-        Artisan::call('db:seed');
+        Artisan::call('migrate:fresh');
     }
 
     public function tearDown(): void
     {
-        Artisan::call('migrate:reset');
+        // @todo: A more generic way to flush the test MongoDB?
+        Article::truncate();
         parent::tearDown();
     }
 }
-
-/*
-abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
-{
-    public function createApplication()
-    {
-        putenv('DB_CONNECTION=sqlite_testing');
-
-        $app = require __DIR__.'/../bootstrap/app.php';
-
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-        return $app;
-    }
-}
-*/

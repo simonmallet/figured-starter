@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Article;
 use App\Models\User;
 
-class PostsTableSeeder extends Seeder
+class ArticlesTableSeeder extends Seeder
 {
     /**
      * @return void
