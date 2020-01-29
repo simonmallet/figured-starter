@@ -24,4 +24,14 @@ class ArticleControllerTest extends TestCase
             ->assertStatus(200)
             ->assertJsonCount(1, 'data');
     }
+
+    public function testGivenTwoArticlesWhenArticleIsCalledThenTwoDatasetReturned()
+    {
+        factory(Article::class, 2)->create();
+
+        $response = $this->json('GET', '/api/article');
+        $response
+            ->assertStatus(200)
+            ->assertJsonCount(2, 'data');
+    }
 }
