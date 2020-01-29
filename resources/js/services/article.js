@@ -6,5 +6,11 @@ export default {
             .then(response => {
                 return response.data;
             })
+    },
+    addArticle (data) {
+        return axios.post('/article', data)
+            .then(response => {
+                return response.data;
+            })
     }
 }

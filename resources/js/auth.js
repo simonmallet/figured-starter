@@ -12,11 +12,6 @@ const config = {
     tokenStore: ['localStorage'],
 
     // API endpoints used in Vue Auth.
-    registerData: {
-        url: 'auth/register',
-        method: 'POST',
-        redirect: '/login'
-    },
     loginData: {
         url: 'auth/login',
         method: 'POST',

@@ -1,6 +1,8 @@
 <template>
     <div class="container">
-        <div>Welcome admin user!</div>
+        <div class="text-right">
+            <div class=""><router-link :to="{name: 'admin.add.article'}" class="navbar-brand">Add Article</router-link></div>
+        </div>
         <Article v-for="post in posts" :title="post.title" :content="post.body" :created_at="post.created_at"></Article>
     </div>
 </template>
