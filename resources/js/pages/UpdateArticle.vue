@@ -5,12 +5,7 @@
                 <div class="card card-default">
                     <div class="card-header">Update Article {{ article.title }}</div>
                     <div class="card-body">
-                        <p v-if="errors.length">
-                            <b>Please correct the following error(s):</b>
-                            <ul>
-                                <li v-for="error in errors">{{ error }}</li>
-                            </ul>
-                        </p>
+                        <ErrorDisplay v-bind:errors="errors"></ErrorDisplay>
                         <form autocomplete="off" @submit.prevent="updateArticle" method="post">
                             <div class="form-group">
                                 <label for="title">Title</label>
@@ -30,6 +25,7 @@
     </div>
 </template>
 <script>
+    import ErrorDisplay from "../components/ErrorDisplay";
     import BlogEditor from '../components/BlogEditor';
     import ArticleService from '../services/article.js';
     import Validator from '../helpers/validator.js';
@@ -78,6 +74,7 @@
                 .catch(error => console.log(error))
         },
         components: {
+            ErrorDisplay,
             BlogEditor
         }
     }
