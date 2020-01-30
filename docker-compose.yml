@@ -45,6 +45,14 @@ services:
       - 27017:27017
     command: mongod --logpath=/dev/null
 
+  selenium:
+    image: selenium/standalone-chrome:latest
+    depends_on:
+      - web
+    links:
+      - web:sdnet.test
+    volumes:
+      - /dev/shm:/dev/shm
 
 volumes:
   mysqldbdata:
