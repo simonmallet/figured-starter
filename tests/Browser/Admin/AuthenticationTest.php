@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Browser;
+namespace Tests\Browser\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -12,7 +12,7 @@ use Tests\DuskTestCase;
  * The user & article information gets saved inside the test databases but for some reason
  * when selenium runs the tests the articles & users cannot be found...
  */
-class AdminUserTest extends DuskTestCase
+class AuthenticationTest extends DuskTestCase
 {
     use DatabaseMigrations;
     const ADMIN_PWD = 'password';
@@ -31,9 +31,14 @@ class AdminUserTest extends DuskTestCase
         });
     }
 
-    /*
+
     public function testGivenInvalidCredentialsWhenSignInThenErrorDisplayed()
     {
-        //
-    }*/
+        $this->markTestSkipped();
+    }
+
+    public function testGivenLoggedInAdminWhenLogoutThenRedirectToHomePage()
+    {
+        $this->markTestSkipped();
+    }
 }
