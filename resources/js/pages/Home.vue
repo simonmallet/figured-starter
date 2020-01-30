@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <template v-if="articles.length">
-            <Article v-for="article in articles" v-bind:article="article"></Article>
+            <Article v-for="article in articles" v-bind:article="article" :key="article._id"></Article>
         </template>
         <template v-if="seen && !articles.length">
             <NoArticle></NoArticle>

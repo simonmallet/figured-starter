@@ -15,8 +15,8 @@
                                 <input type="text" id="title" class="form-control" placeholder="Write a title here" v-model="title" required>
                             </div>
                             <div class="form-group">
-                                <label for="body">Content</label>
-                                <textarea type="text" id="body" class="form-control" v-model="body" required></textarea>
+                                <label for="editor">Content</label>
+                                <BlogEditor id="editor" class="editor__edit form-control" v-bind:content="content" @contentUpdated="editorUpdated"></BlogEditor>
                             </div>
                             <button type="submit" class="btn btn-primary">Add</button>
                             <router-link :to="{name: 'admin.dashboard'}" tag="button" class="btn btn-secondary">Go back</router-link>
@@ -28,6 +28,7 @@
     </div>
 </template>
 <script>
+    import BlogEditor from '../components/BlogEditor';
     import ArticleService from '../services/article.js';
     export default {
         data() {
@@ -36,21 +37,28 @@
                 body: '',
                 tags: [],
                 has_error: false,
-                error: ''
+                error: '',
+                content: '',
             }
         },
         methods: {
             addArticle() {
                 let app = this;
 
-                ArticleService.addArticle({title: app.title, body: app.body})
+                ArticleService.addArticle({title: app.title, body: this.content})
                     .then(response => {
                         app.success = true;
 
                         this.$router.push({name: 'admin.dashboard'});
                     })
                     .catch(error => console.log(error))
+            },
+            editorUpdated(contentUpdated) {
+                this.content = contentUpdated;
             }
-        }
+        },
+        components: {
+            BlogEditor
+        },
     }
 </script>

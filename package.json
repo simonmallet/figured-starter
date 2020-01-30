@@ -26,7 +26,12 @@
     "dependencies": {
         "@websanova/vue-auth": "^2.21.15-beta",
         "es6-promise": "^4.2.8",
+        "tiptap": "^1.26.6",
+        "tiptap-extensions": "^1.28.6",
         "vue-axios": "^2.1.5",
         "vue-router": "^3.1.5"
+    },
+    "resolutions": {
+        "prosemirror-model": "1.8.2"
     }
 }

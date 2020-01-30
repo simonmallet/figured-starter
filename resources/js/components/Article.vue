@@ -14,13 +14,14 @@
         </div>
         <div class="card-body">
             <p>
-                {{ article.body }}
+                <BlogEditor v-bind:editable="false" v-bind:showMenuBar="false" v-bind:content="article.body"></BlogEditor>
             </p>
         </div>
     </div>
 </template>
 
 <script>
+    import BlogEditor from "./BlogEditor";
     import ArticleService from '../services/article.js';
     export default {
         props: ['article'],
@@ -33,6 +34,9 @@
                     })
                     .catch(error => console.log(error))
             }
+        },
+        components: {
+            BlogEditor
         }
     }
 </script>

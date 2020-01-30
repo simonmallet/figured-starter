@@ -1,0 +1,9 @@
+.editor__content {
+    .ProseMirror-focused {
+        outline: none;
+    }
+}
+
+.editor__edit.form-control {
+    height: auto;
+}
