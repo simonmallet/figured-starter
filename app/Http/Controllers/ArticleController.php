@@ -21,16 +21,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,7 +28,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        // validate fields...
+        // @todo: validate fields...
         $post = new Article;
         $post->title = $request->title;
         $post->body = $request->body;
@@ -51,23 +41,20 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Article  $article
+     * @param  string  $articleId
      * @return \Illuminate\Http\Response
      */
-    public function show(Article $article)
+    public function show($articleId)
     {
-        //
-    }
+        $article = Article::find($articleId);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Article $article)
-    {
-        //
+        if (!is_null($article)) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $article
+            ]);
+        }
+        return response()->json(['status' => 'not_found'], 400);
     }
 
     /**

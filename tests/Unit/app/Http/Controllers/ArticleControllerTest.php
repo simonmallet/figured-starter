@@ -33,6 +33,23 @@ class ArticleControllerTest extends TestCase
             ->assertJsonCount(2, 'data');
     }
 
+    public function testGivenOneValidArticleIdWhenGetArticleThenReturnArticle()
+    {
+        $article = factory(Article::class)->create();
+
+        $this->getArticle($article->_id)
+            ->assertStatus(200)
+            ->assertJsonFragment(['title' => $article->title]);
+    }
+
+    public function testGivenOneInvalidArticleIdWhenGetArticleThenReturnNotFound()
+    {
+        factory(Article::class)->create();
+
+        $this->getArticle('badId')
+            ->assertStatus(400);
+    }
+
     public function testGivenAdminUserWhenCreateArticleThenSuccessful()
     {
         $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
@@ -101,5 +118,10 @@ class ArticleControllerTest extends TestCase
     private function getArticlesList()
     {
         return $this->json('GET', route('api.articles.list'));
+    }
+
+    private function getArticle($articleId)
+    {
+        return $this->json('GET', route('api.articles.show', ['articleId' => $articleId]));
     }
 }

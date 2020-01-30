@@ -28,6 +28,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::get('article', 'ArticleController@index')->name('api.articles.list');
+Route::get('article/{articleId}', 'ArticleController@show')->name('api.articles.show');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('article', 'ArticleController@store')->middleware('isAdmin')->name('api.articles.post');
