@@ -115,6 +115,51 @@ class ArticleControllerTest extends TestCase
             ->assertStatus(403);
     }
 
+    public function testGivenAdminUserWhenUpdateArticleAndValidFieldsThenSuccessful()
+    {
+        $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
+        $article = factory(Article::class)->create();
+
+        $this->actingAs($user, 'api')->json(
+            'PUT',
+            route('api.articles.update', ['articleId' => $article->id]),
+            ['title' => 'ok!', 'body' => 'ok!'])
+            ->assertStatus(200);
+    }
+
+    public function testGivenAdminUserWhenUpdateArticleAndInvalidFieldsThenErrorThrown()
+    {
+        $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
+        $article = factory(Article::class)->create();
+
+        $this->actingAs($user, 'api')->json(
+            'PUT',
+            route('api.articles.update', ['articleId' => $article->id]),
+            ['title' => '', 'body' => 'ok!'])
+            ->assertStatus(422);
+    }
+
+    public function testGivenRegularUserWhenUpdateArticleThenErrorThrown()
+    {
+        $user = factory(User::class)->create(['role' => User::ROLE_USER]);
+        $article = factory(Article::class)->create();
+
+        $this->actingAs($user, 'api')->json('PUT',
+            route('api.articles.update', ['articleId' => $article->id]),
+            ['title' => 'ok!', 'body' => 'ok!'])
+            ->assertStatus(403);
+    }
+
+    public function testGivenAnonymousUserWhenUpdateArticleThenErrorThrown()
+    {
+        $article = factory(Article::class)->create();
+
+        $this->json('PUT',
+            route('api.articles.update', ['articleId' => $article->id]),
+            ['title' => 'ok!', 'body' => 'ok!'])
+            ->assertStatus(403);
+    }
+
     private function getArticlesList()
     {
         return $this->json('GET', route('api.articles.list'));

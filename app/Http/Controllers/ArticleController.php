@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -61,12 +62,33 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
+     * @param  string $articleId
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(Request $request, $articleId)
     {
-        //
+        $v = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'body' => 'required'
+            ]
+        );
+
+        if ($v->fails()) {
+            return response()->json(['status' => 'error', 'errors' => $v->errors()], 422);
+        }
+
+        /** @var Article $article */
+        $article = Article::find($articleId);
+        if (is_null($article)) {
+            return response()->json(['status' => 'not_found'], 400);
+        }
+
+        $article->title = $request->get('title');
+        $article->body = $request->get('body');
+        $article->save();
+        return response()->json(['status' => 'success'], 200);
     }
 
     /**

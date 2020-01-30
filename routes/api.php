@@ -32,5 +32,6 @@ Route::get('article/{articleId}', 'ArticleController@show')->name('api.articles.
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('article', 'ArticleController@store')->middleware('isAdmin')->name('api.articles.post');
+    Route::match(['put', 'patch'], 'article/{articleId}', 'ArticleController@update')->middleware('isAdmin')->name('api.articles.update');
     Route::delete('article/{articleId}', 'ArticleController@destroy')->middleware('isAdmin')->name('api.articles.delete');
 });
