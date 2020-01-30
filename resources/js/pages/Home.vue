@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Article v-for="post in posts" v-bind:article="post"></Article>
+        <Article v-for="article in articles" v-bind:article="article"></Article>
     </div>
 </template>
 <script>
@@ -9,13 +9,13 @@
     export default {
         data() {
             return {
-                posts: []
+                articles: []
             }
         },
         created() {
             ArticleService.getArticles()
-                .then(posts => {
-                    this.posts = posts.data;
+                .then(articles => {
+                    this.articles = articles.data;
                 })
                 .catch(error => console.log(error))
         },

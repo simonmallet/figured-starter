@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from './pages/Home'
 import AdminDashboard from './pages/AdminDashboard'
 import AddArticle from './pages/AddArticle'
+import UpdateArticle from "./pages/UpdateArticle";
 import Login from './pages/Login'
 
 // Routes
@@ -35,6 +36,14 @@ const routes = [
         path: '/admin/article',
         name: 'admin.add.article',
         component: AddArticle,
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/admin/article/:articleId',
+        name: 'admin.update.article',
+        component: UpdateArticle,
         meta: {
             auth: true
         }

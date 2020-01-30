@@ -5,6 +5,7 @@
             <div class="float-right">
                 {{ article.created_at }}
                 <div class="float-right pl-5" v-if="$auth.check()">
+                    <router-link :to="{name: 'admin.update.article', params: {articleId: article._id}}" class="pr-3">Update</router-link>
                     <button type="button" class="close" aria-label="Close" v-on:click.once="deleteArticle">
                         <span aria-hidden="true">&times;</span>
                     </button>
