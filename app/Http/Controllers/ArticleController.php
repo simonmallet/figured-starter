@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -29,11 +30,24 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        // @todo: validate fields...
+        $v = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'body' => 'required'
+            ]
+        );
+
+        if ($v->fails()) {
+            return response()->json(['status' => 'error', 'errors' => $v->errors()], 422);
+        }
+
         $post = new Article;
         $post->title = $request->title;
         $post->body = $request->body;
         $post->tags = $request->tags;
+        // @todo: Would need to change if multiple users can create posts...
+        $post->created_by = User::ADMIN_NAME;
         $post->save();
 
         return response()->json(['status' => 'success'], 201);

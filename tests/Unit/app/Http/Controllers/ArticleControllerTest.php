@@ -50,15 +50,22 @@ class ArticleControllerTest extends TestCase
             ->assertStatus(400);
     }
 
-    public function testGivenAdminUserWhenCreateArticleThenSuccessful()
+    public function testGivenAdminUserWhenCreateArticleAndValidFieldsThenSuccessful()
     {
         $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
-        $this->actingAs($user, 'api')->json('POST', route('api.articles.post'))
+        $this->actingAs($user, 'api')->json('POST', route('api.articles.post'), ['title' => 'abc', 'body' => 'def'])
             ->assertStatus(201);
 
         $this->getArticlesList()
             ->assertStatus(200)
             ->assertJsonCount(1, 'data');
+    }
+
+    public function testGivenAdminUserWhenCreateArticleAndInvalidFieldsThenErrorThrown()
+    {
+        $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
+        $this->actingAs($user, 'api')->json('POST', route('api.articles.post'), ['title' => '', 'body' => 'def'])
+            ->assertStatus(422);
     }
 
     public function testGivenRegularUserWhenCreateArticleThenReturnError()
