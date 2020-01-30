@@ -37,3 +37,7 @@ Because we are running under an image called app we have to use docker-compose e
 As above, we need to run tests using exec, E.g.
 
     docker-compose exec app ./vendor/bin/phpunit
+    
+## Running end-to-end tests
+
+    docker-compose exec app php artisan dusk
