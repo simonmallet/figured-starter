@@ -3,7 +3,7 @@
         <div class="text-right">
             <div class=""><router-link :to="{name: 'admin.add.article'}" class="navbar-brand">Add Article</router-link></div>
         </div>
-        <Article v-for="post in posts" :title="post.title" :content="post.body" :created_at="post.created_at"></Article>
+        <Article v-for="(post, index) in posts" :title="post.title" v-bind:article="post" :key="post._id" v-on:delete-article="deleteArticle(index)"></Article>
     </div>
 </template>
 <script>
@@ -21,6 +21,11 @@
                     this.posts = posts.data;
                 })
                 .catch(error => console.log(error))
+        },
+        methods: {
+            deleteArticle(index) {
+                this.posts.splice(index, 1);
+            }
         },
         components: {
             Article

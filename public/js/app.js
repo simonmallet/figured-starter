@@ -3120,6 +3120,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_article_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/article.js */ "./resources/js/services/article.js");
 //
 //
 //
@@ -3141,8 +3142,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['title', 'content', 'created_at']
+  props: ['article'],
+  methods: {
+    deleteArticle: function deleteArticle() {
+      var _this = this;
+
+      _services_article_js__WEBPACK_IMPORTED_MODULE_0__["default"].deleteArticle(this.article._id).then(function (response) {
+        app.success = true;
+
+        _this.$emit('delete-article');
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -3310,6 +3325,11 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (error) {
       return console.log(error);
     });
+  },
+  methods: {
+    deleteArticle: function deleteArticle(index) {
+      this.posts.splice(index, 1);
+    }
   },
   components: {
     Article: _components_Article_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -40698,37 +40718,45 @@ var render = function() {
   return _c("div", { staticClass: "card card-default mb-3" }, [
     _c("div", { staticClass: "card-header" }, [
       _c("div", { staticClass: "float-left font-weight-bold" }, [
-        _vm._v(_vm._s(_vm.title))
+        _vm._v(_vm._s(_vm.article.title))
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "float-right" }, [
-        _vm._v("\n            " + _vm._s(_vm.created_at) + "\n            "),
+        _vm._v(
+          "\n            " + _vm._s(_vm.article.created_at) + "\n            "
+        ),
         _vm.$auth.check()
-          ? _c("div", { staticClass: "float-right pl-5" }, [_vm._m(0)])
+          ? _c("div", { staticClass: "float-right pl-5" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "close",
+                  attrs: { type: "button", "aria-label": "Close" },
+                  on: {
+                    "~click": function($event) {
+                      return _vm.deleteArticle($event)
+                    }
+                  }
+                },
+                [
+                  _c("span", { attrs: { "aria-hidden": "true" } }, [
+                    _vm._v("×")
+                  ])
+                ]
+              )
+            ])
           : _vm._e()
       ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
-      _c("p", [_vm._v("\n            " + _vm._s(_vm.content) + "\n        ")])
+      _c("p", [
+        _vm._v("\n            " + _vm._s(_vm.article.body) + "\n        ")
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: { type: "button", "aria-label": "Close" }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -41047,12 +41075,14 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._l(_vm.posts, function(post) {
+      _vm._l(_vm.posts, function(post, index) {
         return _c("Article", {
-          attrs: {
-            title: post.title,
-            content: post.body,
-            created_at: post.created_at
+          key: post._id,
+          attrs: { title: post.title, article: post },
+          on: {
+            "delete-article": function($event) {
+              return _vm.deleteArticle(index)
+            }
           }
         })
       })
@@ -41086,13 +41116,7 @@ var render = function() {
     "div",
     { staticClass: "container" },
     _vm._l(_vm.posts, function(post) {
-      return _c("Article", {
-        attrs: {
-          title: post.title,
-          content: post.body,
-          created_at: post.created_at
-        }
-      })
+      return _c("Article", { attrs: { article: post } })
     }),
     1
   )
@@ -57060,6 +57084,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   addArticle: function addArticle(data) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/article', data).then(function (response) {
+      return response.data;
+    });
+  },
+  deleteArticle: function deleteArticle(articleId) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/article/' + articleId).then(function (response) {
       return response.data;
     });
   }

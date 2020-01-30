@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Article v-for="post in posts" :title="post.title" :content="post.body" :created_at="post.created_at"></Article>
+        <Article v-for="post in posts" v-bind:article="post"></Article>
     </div>
 </template>
 <script>

@@ -12,5 +12,11 @@ export default {
             .then(response => {
                 return response.data;
             })
+    },
+    deleteArticle (articleId) {
+        return axios.delete( '/article/' + articleId)
+            .then(response => {
+                return response.data;
+            })
     }
 }

@@ -1,11 +1,11 @@
 <template>
     <div class="card card-default mb-3">
         <div class="card-header">
-            <div class="float-left font-weight-bold">{{ title }}</div>
+            <div class="float-left font-weight-bold">{{ article.title }}</div>
             <div class="float-right">
-                {{ created_at }}
+                {{ article.created_at }}
                 <div class="float-right pl-5" v-if="$auth.check()">
-                    <button type="button" class="close" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close" v-on:click.once="deleteArticle">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -13,14 +13,25 @@
         </div>
         <div class="card-body">
             <p>
-                {{ content }}
+                {{ article.body }}
             </p>
         </div>
     </div>
 </template>
 
 <script>
+    import ArticleService from '../services/article.js';
     export default {
-        props: ['title', 'content', 'created_at']
+        props: ['article'],
+        methods: {
+            deleteArticle() {
+                ArticleService.deleteArticle(this.article._id)
+                    .then(response => {
+                        app.success = true;
+                        this.$emit('delete-article');
+                    })
+                    .catch(error => console.log(error))
+            }
+        }
     }
 </script>
