@@ -35,7 +35,7 @@
             updateArticle() {
                 let app = this;
 
-                ArticleService.addArticle({title: app.title, body: app.body})
+                ArticleService.updateArticle(app.article._id, {title: app.article.title, body: app.article.body})
                     .then(response => {
                         app.success = true;
 

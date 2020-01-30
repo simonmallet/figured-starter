@@ -19,6 +19,12 @@ export default {
                 return response.data;
             })
     },
+    updateArticle (articleId, data) {
+        return axios.put('/article/' + articleId, data)
+            .then(response => {
+                return response.data;
+            })
+    },
     deleteArticle (articleId) {
         return axios.delete( '/article/' + articleId)
             .then(response => {

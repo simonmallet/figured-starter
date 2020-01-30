@@ -3506,9 +3506,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var app = this;
-      _services_article_js__WEBPACK_IMPORTED_MODULE_0__["default"].addArticle({
-        title: app.title,
-        body: app.body
+      _services_article_js__WEBPACK_IMPORTED_MODULE_0__["default"].updateArticle(app.article._id, {
+        title: app.article.title,
+        body: app.article.body
       }).then(function (response) {
         app.success = true;
 
@@ -57384,6 +57384,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   addArticle: function addArticle(data) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/article', data).then(function (response) {
+      return response.data;
+    });
+  },
+  updateArticle: function updateArticle(articleId, data) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/article/' + articleId, data).then(function (response) {
       return response.data;
     });
   },
