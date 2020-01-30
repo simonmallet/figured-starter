@@ -12,7 +12,7 @@
                         <form autocomplete="off" @submit.prevent="login" method="post">
                             <div class="form-group">
                                 <label for="email">E-mail</label>
-                                <input type="email" id="email" class="form-control" placeholder="user@example.com" v-model="email" required>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="user@example.com" v-model="email" :autofocus="'autofocus'" required>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
@@ -38,7 +38,7 @@
             }
         },
         mounted() {
-            //
+            this.formFocus();
         },
         methods: {
             login() {
@@ -60,6 +60,9 @@
                     rememberMe: true,
                     fetchUser: true
                 })
+            },
+            formFocus() {
+                document.getElementById("email").focus();
             }
         }
     }

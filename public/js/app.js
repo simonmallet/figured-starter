@@ -3645,33 +3645,34 @@ __webpack_require__.r(__webpack_exports__);
       error: ''
     };
   },
-  mounted: function mounted() {//
+  mounted: function mounted() {
+    this.formFocus();
   },
   methods: {
     login: function login() {
-      // get the redirect object
-      var redirect = this.$auth.redirect();
-      var app = this;
       this.$auth.login({
         data: {
-          email: app.email,
-          password: app.password
+          email: this.email,
+          password: this.password
         },
         success: function success() {
           // handle redirection
-          app.success = true;
+          this.success = true;
           var redirectTo = 'admin.dashboard';
           this.$router.push({
             name: redirectTo
           });
         },
         error: function error() {
-          app.has_error = true;
-          app.error = res.response.data.error;
+          this.has_error = true;
+          this.error = res.response.data.error;
         },
         rememberMe: true,
         fetchUser: true
       });
+    },
+    formFocus: function formFocus() {
+      document.getElementById("email").focus();
     }
   }
 });
@@ -81553,7 +81554,9 @@ var render = function() {
                     attrs: {
                       type: "email",
                       id: "email",
+                      name: "email",
                       placeholder: "user@example.com",
+                      autofocus: "autofocus",
                       required: ""
                     },
                     domProps: { value: _vm.email },
