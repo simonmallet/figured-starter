@@ -42,24 +42,20 @@
         },
         methods: {
             login() {
-                // get the redirect object
-                let redirect = this.$auth.redirect();
-                let app = this;
-
                 this.$auth.login({
                     data: {
-                        email: app.email,
-                        password: app.password
+                        email: this.email,
+                        password: this.password
                     },
                     success: function() {
                         // handle redirection
-                        app.success = true;
+                        this.success = true;
                         const redirectTo = 'admin.dashboard';
                         this.$router.push({name: redirectTo});
                     },
                     error: function() {
-                        app.has_error = true;
-                        app.error = res.response.data.error;
+                        this.has_error = true;
+                        this.error = res.response.data.error;
                     },
                     rememberMe: true,
                     fetchUser: true
