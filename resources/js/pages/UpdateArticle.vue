@@ -5,6 +5,12 @@
                 <div class="card card-default">
                     <div class="card-header">Update Article {{ article.title }}</div>
                     <div class="card-body">
+                        <p v-if="errors.length">
+                            <b>Please correct the following error(s):</b>
+                            <ul>
+                                <li v-for="error in errors">{{ error }}</li>
+                            </ul>
+                        </p>
                         <form autocomplete="off" @submit.prevent="updateArticle" method="post">
                             <div class="form-group">
                                 <label for="title">Title</label>
@@ -24,22 +30,29 @@
     </div>
 </template>
 <script>
-    import BlogEditor from "../components/BlogEditor";
+    import BlogEditor from '../components/BlogEditor';
     import ArticleService from '../services/article.js';
+    import Validator from '../helpers/validator.js';
     export default {
         data() {
             return {
                 article: [],
+                errors: [],
                 content: '',
             }
         },
         methods: {
             updateArticle() {
-                let app = this;
+                this.clearErrors();
 
-                ArticleService.updateArticle(app.article._id, {title: app.article.title, body: app.content})
+                if (Validator.isEmptyArticleContent(this.content)) {
+                    this.errors.push(Validator.ARTICLE_CANNOT_BE_EMPTY);
+                    return;
+                }
+
+                ArticleService.updateArticle(this.article._id, {title: this.article.title, body: this.content})
                     .then(response => {
-                        app.success = true;
+                        this.success = true;
 
                         this.$router.push({name: 'admin.dashboard'});
                     })
@@ -47,7 +60,14 @@
             },
             editorUpdated(contentUpdated) {
                 this.content = contentUpdated;
-            }
+                this.clearErrors();
+                if (Validator.isEmptyArticleContent(contentUpdated)) {
+                    this.errors.push(Validator.ARTICLE_CANNOT_BE_EMPTY);
+                }
+            },
+            clearErrors() {
+                this.errors = [];
+            },
         },
         created() {
             ArticleService.getArticle(this.$route.params.articleId)

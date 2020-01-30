@@ -5,10 +5,12 @@
                 <div class="card card-default">
                     <div class="card-header">Add a new Article</div>
                     <div class="card-body">
-                        <div class="alert alert-danger" v-if="has_error && !success">
-                            <p v-if="error === 'login_error'">Validation Errors.</p>
-                            <p v-else>An internal error occurred. Please verify the data and try again</p>
-                        </div>
+                        <p v-if="errors.length">
+                            <b>Please correct the following error(s):</b>
+                            <ul>
+                                <li v-for="error in errors">{{ error }}</li>
+                            </ul>
+                        </p>
                         <form autocomplete="off" @submit.prevent="addArticle" method="post">
                             <div class="form-group">
                                 <label for="title">Title</label>
@@ -30,32 +32,43 @@
 <script>
     import BlogEditor from '../components/BlogEditor';
     import ArticleService from '../services/article.js';
+    import Validator from '../helpers/validator.js';
     export default {
         data() {
             return {
                 title: '',
                 body: '',
-                tags: [],
-                has_error: false,
-                error: '',
+                errors: [],
                 content: '',
             }
         },
         methods: {
             addArticle() {
-                let app = this;
+                this.clearErrors();
 
-                ArticleService.addArticle({title: app.title, body: this.content})
+                if (Validator.isEmptyArticleContent(this.content)) {
+                    this.errors.push(Validator.ARTICLE_CANNOT_BE_EMPTY);
+                    return;
+                }
+
+                ArticleService.addArticle({title: this.title, body: this.content})
                     .then(response => {
-                        app.success = true;
+                        this.success = true;
 
                         this.$router.push({name: 'admin.dashboard'});
                     })
-                    .catch(error => console.log(error))
+                    .catch((error) => console.log(error))
             },
             editorUpdated(contentUpdated) {
                 this.content = contentUpdated;
-            }
+                this.clearErrors();
+                if (Validator.isEmptyArticleContent(contentUpdated)) {
+                    this.errors.push(Validator.ARTICLE_CANNOT_BE_EMPTY);
+                }
+            },
+            clearErrors() {
+                this.errors = [];
+            },
         },
         components: {
             BlogEditor

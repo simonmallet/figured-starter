@@ -3378,6 +3378,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_BlogEditor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/BlogEditor */ "./resources/js/components/BlogEditor.vue");
 /* harmony import */ var _services_article_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/article.js */ "./resources/js/services/article.js");
+/* harmony import */ var _helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/validator.js */ "./resources/js/helpers/validator.js");
 //
 //
 //
@@ -3407,6 +3408,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3414,9 +3418,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       title: '',
       body: '',
-      tags: [],
-      has_error: false,
-      error: '',
+      errors: [],
       content: ''
     };
   },
@@ -3424,12 +3426,18 @@ __webpack_require__.r(__webpack_exports__);
     addArticle: function addArticle() {
       var _this = this;
 
-      var app = this;
+      this.clearErrors();
+
+      if (_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].isEmptyArticleContent(this.content)) {
+        this.errors.push(_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].ARTICLE_CANNOT_BE_EMPTY);
+        return;
+      }
+
       _services_article_js__WEBPACK_IMPORTED_MODULE_1__["default"].addArticle({
-        title: app.title,
+        title: this.title,
         body: this.content
       }).then(function (response) {
-        app.success = true;
+        _this.success = true;
 
         _this.$router.push({
           name: 'admin.dashboard'
@@ -3440,6 +3448,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     editorUpdated: function editorUpdated(contentUpdated) {
       this.content = contentUpdated;
+      this.clearErrors();
+
+      if (_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].isEmptyArticleContent(contentUpdated)) {
+        this.errors.push(_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].ARTICLE_CANNOT_BE_EMPTY);
+      }
+    },
+    clearErrors: function clearErrors() {
+      this.errors = [];
     }
   },
   components: {
@@ -3650,6 +3666,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_BlogEditor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/BlogEditor */ "./resources/js/components/BlogEditor.vue");
 /* harmony import */ var _services_article_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/article.js */ "./resources/js/services/article.js");
+/* harmony import */ var _helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/validator.js */ "./resources/js/helpers/validator.js");
 //
 //
 //
@@ -3675,12 +3692,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       article: [],
+      errors: [],
       content: ''
     };
   },
@@ -3688,12 +3713,18 @@ __webpack_require__.r(__webpack_exports__);
     updateArticle: function updateArticle() {
       var _this = this;
 
-      var app = this;
-      _services_article_js__WEBPACK_IMPORTED_MODULE_1__["default"].updateArticle(app.article._id, {
-        title: app.article.title,
-        body: app.content
+      this.clearErrors();
+
+      if (_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].isEmptyArticleContent(this.content)) {
+        this.errors.push(_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].ARTICLE_CANNOT_BE_EMPTY);
+        return;
+      }
+
+      _services_article_js__WEBPACK_IMPORTED_MODULE_1__["default"].updateArticle(this.article._id, {
+        title: this.article.title,
+        body: this.content
       }).then(function (response) {
-        app.success = true;
+        _this.success = true;
 
         _this.$router.push({
           name: 'admin.dashboard'
@@ -3704,6 +3735,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     editorUpdated: function editorUpdated(contentUpdated) {
       this.content = contentUpdated;
+      this.clearErrors();
+
+      if (_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].isEmptyArticleContent(contentUpdated)) {
+        this.errors.push(_helpers_validator_js__WEBPACK_IMPORTED_MODULE_2__["default"].ARTICLE_CANNOT_BE_EMPTY);
+      }
+    },
+    clearErrors: function clearErrors() {
+      this.errors = [];
     }
   },
   created: function created() {
@@ -81190,15 +81229,17 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _vm.has_error && !_vm.success
-              ? _c("div", { staticClass: "alert alert-danger" }, [
-                  _vm.error === "login_error"
-                    ? _c("p", [_vm._v("Validation Errors.")])
-                    : _c("p", [
-                        _vm._v(
-                          "An internal error occurred. Please verify the data and try again"
-                        )
-                      ])
+            _vm.errors.length
+              ? _c("p", [
+                  _c("b", [_vm._v("Please correct the following error(s):")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -81544,6 +81585,20 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _vm.errors.length
+              ? _c("p", [
+                  _c("b", [_vm._v("Please correct the following error(s):")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "form",
               {
@@ -97398,6 +97453,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NoArticle_vue_vue_type_template_id_d78598cc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/helpers/validator.js":
+/*!*******************************************!*\
+  !*** ./resources/js/helpers/validator.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var ARTICLE_CANNOT_BE_EMPTY = 'Article content cannot be empty. Write something cool!';
+/* harmony default export */ __webpack_exports__["default"] = ({
+  ARTICLE_CANNOT_BE_EMPTY: ARTICLE_CANNOT_BE_EMPTY,
+  isEmptyArticleContent: function isEmptyArticleContent(content) {
+    return content === '' || content === '<p></p>' || content === '<h1></h1>' || content === '<h2></h2>' || content === '<h3></h3>';
+  }
+});
 
 /***/ }),
 
